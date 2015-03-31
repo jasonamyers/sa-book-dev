@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from sqlalchemy import (MetaData, Table, Column, Integer, Numeric, String,
@@ -40,7 +41,7 @@ line_items = Table('line_items', metadata,
                    Column('extended_cost', Numeric(12, 2))
                    )
 
-engine = create_engine('sqlite:///:memory:')
+engine = create_engine(os.environ.get('DATABASE_URL') or 'sqlite:///:memory:')
 metadata.create_all(engine)
 
 connection = engine.connect()
