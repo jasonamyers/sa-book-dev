@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlalchemy import (MetaData, Table, Column, Integer, Numeric, String,
         DateTime, ForeignKey, Boolean, create_engine)
+from sqlalchemy.sql import insert
 
 
 class DataAccessLayer:
@@ -52,8 +53,6 @@ dal = DataAccessLayer()
 
 
 def prep_db():
-    from sqlalchemy.sql import insert
-
     ins = dal.cookies.insert()
     dal.connection.execute(ins, cookie_name='dark chocolate chip',
             cookie_recipe_url='http://some.aweso.me/cookie/recipe_dark.html',
