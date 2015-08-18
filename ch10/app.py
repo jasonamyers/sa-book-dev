@@ -1,9 +1,8 @@
-from db import Session, Cookie, LineItem, Order, User,
+from db import Cookie, LineItem, Order, User, DataAccessLayer, dal
 
-session = Session()
 
 def get_orders_by_customer(cust_name, shipped=None, details=False):
-    query = session.query(Order.order_id, User.username, User.phone)
+    query = dal.session.query(Order.order_id, User.username, User.phone)
     query = query.join(User)
     if details:
         query = query.add_columns(Cookie.cookie_name, LineItem.quantity,

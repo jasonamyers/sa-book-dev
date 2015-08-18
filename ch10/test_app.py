@@ -2,22 +2,24 @@ import unittest
 
 from decimal import Decimal
 
-from db import dal, prep_db
+from db import prep_db, dal
+
 from app import get_orders_by_customer
 
 
 class TestApp(unittest.TestCase):
-    cookie_orders = [(u'wlk001', u'cookiemon', u'111-111-1111')]
+    cookie_orders = [(1, u'cookiemon', u'111-111-1111')]
     cookie_details = [
-        (u'wlk001', u'cookiemon', u'111-111-1111',
+        (1, u'cookiemon', u'111-111-1111',
             u'dark chocolate chip', 2, Decimal('1.00')),
-        (u'wlk001', u'cookiemon', u'111-111-1111',
+        (1, u'cookiemon', u'111-111-1111',
             u'oatmeal raisin', 12, Decimal('3.00'))]
 
     @classmethod
     def setUpClass(cls):
-        dal.db_init('sqlite:///:memory:')
-        prep_db()
+        dal.conn_string = 'sqlite:///:memory:'
+        dal.connect()
+        prep_db(dal.session)
 
     def test_orders_by_customer_blank(self):
         results = get_orders_by_customer('')

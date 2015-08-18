@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref, sessionmaker
 
 
+conn_string = 'some conn string'
 Base = declarative_base()
 
 
@@ -80,11 +81,18 @@ class LineItem(Base):
 
 class DataAccessLayer:
 
-    def __init__(self, conn_string):
-        self.engine = create_engine(conn_string)
+    def __init__(self):
+        self.engine = None
+        self.conn_string = conn_string
+
+    def connect(self):
+        self.engine = create_engine(self.conn_string)
+        Base.metadata.create_all(self.engine)
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
-        Base.metadata.create_all(self.engine)
+
+
+dal = DataAccessLayer()
 
 
 def prep_db(session):
@@ -118,7 +126,9 @@ def prep_db(session):
                      email_address='person@pie.com',
                      phone='333-333-3333',
                      password='password')
-    session.bulk_save_objects([cookiemon, cakeeater, pieperson])
+    session.add(cookiemon)
+    session.add(cakeeater)
+    session.add(pieperson)
     session.commit()
 
     o1 = Order()
