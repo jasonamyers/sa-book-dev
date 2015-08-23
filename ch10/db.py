@@ -83,6 +83,7 @@ class DataAccessLayer:
 
     def __init__(self):
         self.engine = None
+        self.session = None
         self.conn_string = conn_string
 
     def connect(self):

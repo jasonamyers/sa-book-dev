@@ -3,7 +3,6 @@ from decimal import Decimal
 
 import mock
 
-from db import dal, prep_db
 from app import get_orders_by_customer
 
 
@@ -16,20 +15,22 @@ class TestApp(unittest.TestCase):
             u'oatmeal raisin', 12, Decimal('3.00'))]
 
     @mock.patch('app.dal.session')
-    def test_orders_by_customer_blank(self, mock_conn, mock_select):
-        mock_select.return_value.select_from.return_value.where.return_value = None
-        mock_conn.execute.return_value.fetchall.return_value = []
+    def test_orders_by_customer_blank(self, mock_dal):
+        mock_dal.query.return_value.join.return_value.filter.return_value. \
+            all.return_value = []
         results = get_orders_by_customer('')
         self.assertEqual(results, [])
 
     @mock.patch('app.dal.session')
-    def test_orders_by_customer_blank_shipped(self, mock_conn):
-        mock_conn.execute.return_value.fetchall.return_value = []
+    def test_orders_by_customer_blank_shipped(self, mock_dal):
+        mock_dal.query.return_value.join.return_value.filter.return_value. \
+            filter.return_value.all.return_value = []
         results = get_orders_by_customer('', True)
         self.assertEqual(results, [])
 
     @mock.patch('app.dal.session')
-    def test_orders_by_customer(self, mock_conn):
-        mock_conn.execute.return_value.fetchall.return_value = self.cookie_orders
+    def test_orders_by_customer(self, mock_dal):
+        mock_dal.query.return_value.join.return_value.filter.return_value. \
+            all.return_value = self.cookie_orders
         results = get_orders_by_customer('cookiemon')
         self.assertEqual(results, self.cookie_orders)
