@@ -19,7 +19,16 @@ class TestApp(unittest.TestCase):
     def setUpClass(cls):
         dal.conn_string = 'sqlite:///:memory:'
         dal.connect()
+        dal.session = dal.Session()
         prep_db(dal.session)
+        dal.session.close()
+
+    def setUp(self):
+        dal.session = dal.Session()
+
+    def tearDown(self):
+        dal.session.rollback()
+        dal.session.close()
 
     def test_orders_by_customer_blank(self):
         results = get_orders_by_customer('')

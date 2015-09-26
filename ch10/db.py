@@ -89,8 +89,7 @@ class DataAccessLayer:
     def connect(self):
         self.engine = create_engine(self.conn_string)
         Base.metadata.create_all(self.engine)
-        Session = sessionmaker(bind=self.engine)
-        self.session = Session()
+        self.Session = sessionmaker(bind=self.engine)
 
 
 dal = DataAccessLayer()

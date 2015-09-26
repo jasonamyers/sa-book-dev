@@ -1,4 +1,4 @@
-from db import Cookie, LineItem, Order, User, DataAccessLayer, dal
+from db import Cookie, LineItem, Order, User,  dal
 
 
 def get_orders_by_customer(cust_name, shipped=None, details=False):
@@ -6,7 +6,7 @@ def get_orders_by_customer(cust_name, shipped=None, details=False):
     query = query.join(User)
     if details:
         query = query.add_columns(Cookie.cookie_name, LineItem.quantity,
-                          LineItem.extended_cost)
+                                  LineItem.extended_cost)
         query = query.join(LineItem).join(Cookie)
     if shipped is not None:
         query = query.filter(Order.shipped == shipped)
